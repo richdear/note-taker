@@ -1,65 +1,89 @@
-import Head from 'next/head'
+import Head from "next/head";
 import styles from '../styles/Home.module.css'
+import Link from "next/link";
+import {Plus, PlusCircle, Trash} from "react-bootstrap-icons";
+import {PencilSquare} from "react-bootstrap-icons";
+import styled from "styled-components";
+import {useState} from "react";
+import Note from "../components/Note";
+
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
 export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    const initalNotes = [
+        {id: 1, created_date: '03-03-2021', created_time: '12:12:13', body: 'Body tes'},
+        {id: 2, created_date: '03-03-2021', created_time: '12:12:13', body: 'Body tes'},
+        {id: 3, created_date: '03-03-2021', created_time: '12:12:13', body: 'Body tes'},
+        {id: 4, created_date: '03-03-2021', created_time: '12:12:13', body: 'Body tes'},
+    ];
+    const [notes, setNotes] = useState(initalNotes);
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+    const deleteNote = (id) => {
+        let newNotes = notes.filter(note => note.id !== id);
+        console.log(newNotes)
+        setNotes(newNotes)
+    }
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+    const handleSave = (id, body) => {
+        let newNotes = [...notes];
+        let index = newNotes.findIndex(note => note.id === id);
+        newNotes[index].body = body;
+        setNotes(newNotes)
+        console.log('NEW notes |')
+        console.log(newNotes)
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        console.log('OLD notes |')
+        console.log(notes)
+    }
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+    const handleAddNote = () => {
+        let newNotes = [...notes];
+        newNotes.push({
+            id: getRandomArbitrary(5, 10), body: 'Some body here ',
+            created_date: new Date().toLocaleTimeString(),
+            created_time: new Date().toLocaleTimeString()
+        })
+        setNotes(newNotes)
+    }
 
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+    return (
+        <>
+            <Head>
+                <title>Create Next App</title>
+                <link rel="icon" href="/favicon.ico"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            </Head>
+            <div>
+                <section className={"d-flex justify-content-center mt-4"}>
+                    <div className="d-flex flex-wrap col-md-8 align-items-center">
+                        <button style={{background: 'none', border: 'none'}}  onClick={() => handleAddNote()}>
+                            <PlusCircle size={30}/>
+                        </button>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+                        <h3 className="mb-0">
+                            Notes
+                        </h3>
+                    </div>
+
+                </section>
+                <section className="d-flex justify-content-center">
+                    <div className="d-flex flex-wrap col-md-8 ">
+                        {
+                            notes.map((note) => {
+                                return <Note key={note.id} id={note.id}
+                                             createdDate={note.created_date}
+                                             createdTime={note.created_time}
+                                             text={note.body}
+                                             onClickDelete={deleteNote} handleSave={handleSave}/>
+                            })
+                        }
+                    </div>
+                </section>
+            </div>
+
+        </>
+    )
 }

@@ -1,5 +1,29 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Dependencies
+1. bootstrap-5
+```bash
+npm install bootstrap@next
+# or
+yarn add bootstrap@next
+```
+
+2. react-bootstrap-icons
+```bash
+npm install react-bootstrap-icons --save
+# or
+yarn add react-bootstrap-icons
+```
+3. styled components
+```bash
+npm install styled-components --save
+# or
+yarn add install styled-components
+```
+
+
+
+
 ## Getting Started
 
 First, run the development server:
